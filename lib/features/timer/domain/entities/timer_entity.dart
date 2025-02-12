@@ -11,7 +11,7 @@ class TimerEntity {
   final int resetTime;
 
   /// The type of the round: 'normal' or 'dualPhase'
-  final TypeTimer type;
+  final String type;
 
   /// The total number of rounds in the timer session
   final int numberOfRounds;
