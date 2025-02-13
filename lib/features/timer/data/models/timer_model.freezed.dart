@@ -20,11 +20,14 @@ TimerModel _$TimerModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TimerModel {
+  String get nameOfTimer =>
+      throw _privateConstructorUsedError; // Added nameOfTimer
+  String get idTimer => throw _privateConstructorUsedError; // Added idTimer
   int get preparationTime => throw _privateConstructorUsedError;
   int? get roundTime => throw _privateConstructorUsedError;
   int get resetTime => throw _privateConstructorUsedError;
-  String get type =>
-      throw _privateConstructorUsedError; // Store type as a string
+  TypeTimer get type =>
+      throw _privateConstructorUsedError; // Use TypeTimer enum instead of String
   int get numberOfRounds => throw _privateConstructorUsedError;
   int? get firstPhaseDuration => throw _privateConstructorUsedError;
   int? get secondPhaseDuration => throw _privateConstructorUsedError;
@@ -46,10 +49,12 @@ abstract class $TimerModelCopyWith<$Res> {
       _$TimerModelCopyWithImpl<$Res, TimerModel>;
   @useResult
   $Res call(
-      {int preparationTime,
+      {String nameOfTimer,
+      String idTimer,
+      int preparationTime,
       int? roundTime,
       int resetTime,
-      String type,
+      TypeTimer type,
       int numberOfRounds,
       int? firstPhaseDuration,
       int? secondPhaseDuration});
@@ -70,6 +75,8 @@ class _$TimerModelCopyWithImpl<$Res, $Val extends TimerModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? nameOfTimer = null,
+    Object? idTimer = null,
     Object? preparationTime = null,
     Object? roundTime = freezed,
     Object? resetTime = null,
@@ -79,6 +86,14 @@ class _$TimerModelCopyWithImpl<$Res, $Val extends TimerModel>
     Object? secondPhaseDuration = freezed,
   }) {
     return _then(_value.copyWith(
+      nameOfTimer: null == nameOfTimer
+          ? _value.nameOfTimer
+          : nameOfTimer // ignore: cast_nullable_to_non_nullable
+              as String,
+      idTimer: null == idTimer
+          ? _value.idTimer
+          : idTimer // ignore: cast_nullable_to_non_nullable
+              as String,
       preparationTime: null == preparationTime
           ? _value.preparationTime
           : preparationTime // ignore: cast_nullable_to_non_nullable
@@ -94,7 +109,7 @@ class _$TimerModelCopyWithImpl<$Res, $Val extends TimerModel>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as TypeTimer,
       numberOfRounds: null == numberOfRounds
           ? _value.numberOfRounds
           : numberOfRounds // ignore: cast_nullable_to_non_nullable
@@ -120,10 +135,12 @@ abstract class _$$TimerModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int preparationTime,
+      {String nameOfTimer,
+      String idTimer,
+      int preparationTime,
       int? roundTime,
       int resetTime,
-      String type,
+      TypeTimer type,
       int numberOfRounds,
       int? firstPhaseDuration,
       int? secondPhaseDuration});
@@ -142,6 +159,8 @@ class __$$TimerModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? nameOfTimer = null,
+    Object? idTimer = null,
     Object? preparationTime = null,
     Object? roundTime = freezed,
     Object? resetTime = null,
@@ -151,6 +170,14 @@ class __$$TimerModelImplCopyWithImpl<$Res>
     Object? secondPhaseDuration = freezed,
   }) {
     return _then(_$TimerModelImpl(
+      nameOfTimer: null == nameOfTimer
+          ? _value.nameOfTimer
+          : nameOfTimer // ignore: cast_nullable_to_non_nullable
+              as String,
+      idTimer: null == idTimer
+          ? _value.idTimer
+          : idTimer // ignore: cast_nullable_to_non_nullable
+              as String,
       preparationTime: null == preparationTime
           ? _value.preparationTime
           : preparationTime // ignore: cast_nullable_to_non_nullable
@@ -166,7 +193,7 @@ class __$$TimerModelImplCopyWithImpl<$Res>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as TypeTimer,
       numberOfRounds: null == numberOfRounds
           ? _value.numberOfRounds
           : numberOfRounds // ignore: cast_nullable_to_non_nullable
@@ -187,7 +214,9 @@ class __$$TimerModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TimerModelImpl implements _TimerModel {
   const _$TimerModelImpl(
-      {required this.preparationTime,
+      {required this.nameOfTimer,
+      required this.idTimer,
+      required this.preparationTime,
       required this.roundTime,
       required this.resetTime,
       required this.type,
@@ -199,14 +228,20 @@ class _$TimerModelImpl implements _TimerModel {
       _$$TimerModelImplFromJson(json);
 
   @override
+  final String nameOfTimer;
+// Added nameOfTimer
+  @override
+  final String idTimer;
+// Added idTimer
+  @override
   final int preparationTime;
   @override
   final int? roundTime;
   @override
   final int resetTime;
   @override
-  final String type;
-// Store type as a string
+  final TypeTimer type;
+// Use TypeTimer enum instead of String
   @override
   final int numberOfRounds;
   @override
@@ -216,7 +251,7 @@ class _$TimerModelImpl implements _TimerModel {
 
   @override
   String toString() {
-    return 'TimerModel(preparationTime: $preparationTime, roundTime: $roundTime, resetTime: $resetTime, type: $type, numberOfRounds: $numberOfRounds, firstPhaseDuration: $firstPhaseDuration, secondPhaseDuration: $secondPhaseDuration)';
+    return 'TimerModel(nameOfTimer: $nameOfTimer, idTimer: $idTimer, preparationTime: $preparationTime, roundTime: $roundTime, resetTime: $resetTime, type: $type, numberOfRounds: $numberOfRounds, firstPhaseDuration: $firstPhaseDuration, secondPhaseDuration: $secondPhaseDuration)';
   }
 
   @override
@@ -224,6 +259,9 @@ class _$TimerModelImpl implements _TimerModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TimerModelImpl &&
+            (identical(other.nameOfTimer, nameOfTimer) ||
+                other.nameOfTimer == nameOfTimer) &&
+            (identical(other.idTimer, idTimer) || other.idTimer == idTimer) &&
             (identical(other.preparationTime, preparationTime) ||
                 other.preparationTime == preparationTime) &&
             (identical(other.roundTime, roundTime) ||
@@ -241,8 +279,17 @@ class _$TimerModelImpl implements _TimerModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, preparationTime, roundTime,
-      resetTime, type, numberOfRounds, firstPhaseDuration, secondPhaseDuration);
+  int get hashCode => Object.hash(
+      runtimeType,
+      nameOfTimer,
+      idTimer,
+      preparationTime,
+      roundTime,
+      resetTime,
+      type,
+      numberOfRounds,
+      firstPhaseDuration,
+      secondPhaseDuration);
 
   /// Create a copy of TimerModel
   /// with the given fields replaced by the non-null parameter values.
@@ -262,10 +309,12 @@ class _$TimerModelImpl implements _TimerModel {
 
 abstract class _TimerModel implements TimerModel {
   const factory _TimerModel(
-      {required final int preparationTime,
+      {required final String nameOfTimer,
+      required final String idTimer,
+      required final int preparationTime,
       required final int? roundTime,
       required final int resetTime,
-      required final String type,
+      required final TypeTimer type,
       required final int numberOfRounds,
       required final int? firstPhaseDuration,
       required final int? secondPhaseDuration}) = _$TimerModelImpl;
@@ -274,13 +323,17 @@ abstract class _TimerModel implements TimerModel {
       _$TimerModelImpl.fromJson;
 
   @override
+  String get nameOfTimer; // Added nameOfTimer
+  @override
+  String get idTimer; // Added idTimer
+  @override
   int get preparationTime;
   @override
   int? get roundTime;
   @override
   int get resetTime;
   @override
-  String get type; // Store type as a string
+  TypeTimer get type; // Use TypeTimer enum instead of String
   @override
   int get numberOfRounds;
   @override

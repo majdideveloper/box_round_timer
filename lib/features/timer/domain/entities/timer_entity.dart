@@ -1,6 +1,11 @@
 enum TypeTimer { normal, dualPhase }
 
 class TimerEntity {
+  //TODO add name of timer as String... and refix type as TypeTimer...
+  final String nameOfTimer;
+
+  final String idTimer;
+
   /// The time before the round starts (in seconds)
   final int preparationTime;
 
@@ -11,7 +16,7 @@ class TimerEntity {
   final int resetTime;
 
   /// The type of the round: 'normal' or 'dualPhase'
-  final String type;
+  final TypeTimer type;
 
   /// The total number of rounds in the timer session
   final int numberOfRounds;
@@ -23,6 +28,8 @@ class TimerEntity {
   final int? secondPhaseDuration;
 
   TimerEntity({
+    required this.nameOfTimer,
+    required this.idTimer,
     required this.preparationTime,
     required this.resetTime,
     required this.type,

@@ -9,7 +9,7 @@ class UpdateTimerUsecase {
   UpdateTimerUsecase(this._repository);
 
   Future<Either<Failure, Unit>> call(
-      String id, TimerEntity updatedTimer) async {
-    return await _repository.updateTimer(id, updatedTimer);
+      String idTimer, TimerEntity updatedTimer) async {
+    return await _repository.updateTimer(idTimer, updatedTimer);
   }
 }

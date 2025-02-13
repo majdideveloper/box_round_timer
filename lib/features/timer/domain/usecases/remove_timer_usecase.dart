@@ -7,7 +7,7 @@ class RemoveTimerUsecase {
 
   RemoveTimerUsecase(this._repository);
 
-  Future<Either<Failure, Unit>> call(String id) async {
-    return await _repository.removeTimer(id);
+  Future<Either<Failure, Unit>> call(String idTimer) async {
+    return await _repository.removeTimer(idTimer);
   }
 }

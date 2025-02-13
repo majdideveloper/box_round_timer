@@ -11,7 +11,7 @@ abstract class TimerRepository {
       String id, TimerEntity updatedTimer);
 
   /// Removes a timer by its unique ID.
-  Future<Either<Failure, Unit>> removeTimer(String id);
+  Future<Either<Failure, Unit>> removeTimer(String idTimer);
 
   /// Retrieves all saved timers.
   Future<Either<Failure, List<TimerEntity>>> getAllTimers();
