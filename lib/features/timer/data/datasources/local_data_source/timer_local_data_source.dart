@@ -1,11 +1,13 @@
+// import 'dart:convert';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/timer_model.dart';
 
-//TODO make is here own class constant
+// Constant key for SharedPreferences
 const String cachedTimersKey = "CACHED_TIMERS";
 
 abstract class TimerLocalDataSource {
@@ -17,10 +19,14 @@ abstract class TimerLocalDataSource {
 
 class TimerLocalDataSourceImpl implements TimerLocalDataSource {
   final SharedPreferences sharedPreferences;
+
   TimerLocalDataSourceImpl({required this.sharedPreferences});
+
   @override
   Future<Unit> addTimer(TimerModel timerModel) async {
+    log("Before getCachedTimers");
     final List<TimerModel> timers = await getCachedTimers();
+    log("Fetched timers, adding new one.");
     timers.add(timerModel);
     await _saveTimers(timers);
     return unit;
@@ -29,9 +35,27 @@ class TimerLocalDataSourceImpl implements TimerLocalDataSource {
   @override
   Future<List<TimerModel>> getCachedTimers() async {
     final jsonString = sharedPreferences.getString(cachedTimersKey);
+
     if (jsonString != null) {
-      final List<dynamic> jsonList = json.decode(jsonString);
-      return jsonList.map((json) => TimerModel.fromJson(json)).toList();
+      try {
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        log("Decoded JSON list: $jsonList");
+
+        // Check if the list is valid before mapping
+        if (jsonList is List &&
+            jsonList.isNotEmpty &&
+            jsonList.first is Map<String, dynamic>) {
+          return jsonList
+              .map((json) => TimerModel.fromJson(json as Map<String, dynamic>))
+              .toList();
+        } else {
+          log("Error: Stored data is not in the correct format.");
+          return [];
+        }
+      } catch (e) {
+        log("Error decoding JSON: $e");
+        return [];
+      }
     }
     return [];
   }
@@ -46,7 +70,6 @@ class TimerLocalDataSourceImpl implements TimerLocalDataSource {
 
   @override
   Future<Unit> updateTimer(String idTimer, TimerModel timerModel) async {
-    //! change this becasue iuse my own uuid
     final List<TimerModel> timers = await getCachedTimers();
     final index = timers.indexWhere((timer) => timer.idTimer == idTimer);
     if (index != -1) {
@@ -57,8 +80,9 @@ class TimerLocalDataSourceImpl implements TimerLocalDataSource {
   }
 
   Future<void> _saveTimers(List<TimerModel> timers) async {
-    final List<String> jsonList =
-        timers.map((timer) => json.encode(timer.toJson())).toList();
-    await sharedPreferences.setString(cachedTimersKey, json.encode(jsonList));
+    final List<Map<String, dynamic>> jsonList =
+        timers.map((timer) => timer.toJson()).toList();
+    final String jsonString = jsonEncode(jsonList);
+    await sharedPreferences.setString(cachedTimersKey, jsonString);
   }
 }
