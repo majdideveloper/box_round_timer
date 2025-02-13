@@ -1,5 +1,6 @@
 import 'package:box_round_timer/features/timer/domain/entities/timer_entity.dart';
 import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit.dart';
+import 'package:box_round_timer/features/timer/presentation/pages/add_or_update_timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -21,6 +22,13 @@ class TimerPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final timer = timers[index];
                 return ListTile(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddOrUpdateTimerPage(
+                              timerEntity: timer,
+                            )),
+                  ),
                   title: Text(timer.nameOfTimer),
                   subtitle: Text('Duration: ${timer.preparationTime} sec'),
                   trailing: IconButton(
@@ -35,16 +43,21 @@ class TimerPage extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.large(
         onPressed: () async {
-          final newTimer = TimerEntity(
-              nameOfTimer: "nameOfTimer",
-              idTimer: const Uuid().v1(),
-              preparationTime: 60,
-              resetTime: 60,
-              type: TypeTimer.normal,
-              numberOfRounds: 3);
-          context.read<TimerCubit>().createTimer(newTimer);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddOrUpdateTimerPage()),
+          );
+          // final newTimer = TimerEntity(
+          //     nameOfTimer: "nameOfTimer",
+          //     idTimer: const Uuid().v1(),
+          //     preparationTime: 60,
+          //     resetTime: 60,
+          //     type: TypeTimer.normal,
+          //     numberOfRounds: 3);
+          // context.read<TimerCubit>().createTimer(newTimer);
         },
         child: const Icon(Icons.add),
       ),

@@ -39,7 +39,6 @@ class TimerLocalDataSourceImpl implements TimerLocalDataSource {
     if (jsonString != null) {
       try {
         final List<dynamic> jsonList = jsonDecode(jsonString);
-        log("Decoded JSON list: $jsonList");
 
         // Check if the list is valid before mapping
         if (jsonList is List &&
