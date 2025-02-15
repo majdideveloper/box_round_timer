@@ -1,4 +1,6 @@
-import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit.dart';
+import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit/timer_cubit.dart';
+import 'package:box_round_timer/features/timer/presentation/pages/home_page.dart';
+import 'package:box_round_timer/features/timer/presentation/pages/run_timer_page.dart';
 import 'package:box_round_timer/features/timer/presentation/pages/timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: TimerPage(),
+        home: HomePage(), //   RunTimerPage() //TimerPage(),
         //const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
