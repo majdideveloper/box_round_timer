@@ -6,7 +6,7 @@ import 'package:box_round_timer/features/timer/domain/usecases/get_all_timers_us
 import 'package:box_round_timer/features/timer/domain/usecases/remove_timer_usecase.dart';
 import 'package:box_round_timer/features/timer/domain/usecases/update_tiemr_usecase.dart';
 
-import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit.dart';
+import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit/timer_cubit.dart';
 
 import '../../main_injection_container.dart';
 

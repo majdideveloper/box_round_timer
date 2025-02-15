@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:box_round_timer/features/timer/presentation/widgets/custom_timer_or_number_input.dart';
+import 'package:box_round_timer/features/timer/presentation/widgets/input_number.dart';
+import 'package:box_round_timer/features/timer/presentation/widgets/number_or_timer_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:box_round_timer/features/timer/domain/entities/timer_entity.dart';
-import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit.dart';
+import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit/timer_cubit.dart';
 
 class AddOrUpdateTimerPage extends StatefulWidget {
   final TimerEntity? timerEntity;
@@ -44,6 +47,15 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
       _resetTimeController.text = widget.timerEntity!.resetTime.toString();
       _numberOfRoundsController.text =
           widget.timerEntity!.numberOfRounds.toString();
+    } else {
+      //TODO refactor this code to make more redable
+      _nameController.text = TimerEntity.defaultTimer().nameOfTimer;
+      _preparationTimeController.text =
+          TimerEntity.defaultTimer().preparationTime.toString();
+      _resetTimeController.text =
+          TimerEntity.defaultTimer().resetTime.toString();
+      _numberOfRoundsController.text =
+          TimerEntity.defaultTimer().numberOfRounds.toString();
     }
     super.initState();
   }
@@ -77,7 +89,9 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create New Timer'),
+        title: Text(widget.timerEntity != null
+            ? '__Update Timer'
+            : '__Create New Timer'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,15 +99,58 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
           key: _formKey,
           child: ListView(
             children: [
+              CustomTimerOrNumberInput(
+                  isTimer: true,
+                  onChanged: (number) =>
+                      _preparationTimeController.text == number),
+              NumberOrTimerPicker(
+                title: 'Preparation Time',
+                initialValue: int.parse(_preparationTimeController.text),
+                onSelected: (value) {
+                  setState(() {
+                    //TODO i need default timer to make work every time
+                    _preparationTimeController.text = value.toString();
+                  });
+                },
+              ),
+              IOSNumberPicker(
+                title: 'Reset Time (seconds)',
+                initialValue: int.parse(_resetTimeController.text),
+                onSelected: (value) {
+                  setState(() {
+                    _resetTimeController.text = value.toString();
+                  });
+                },
+              ),
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Timer Name'),
+                decoration: InputDecoration(labelText: '__Timer Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name for the timer';
                   }
                   return null;
                 },
+              ),
+              //TODO fix this radio button to save the correct value
+              //TODO make this widget in common widget to use in home page and in this page
+              Text('Timer Type',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Row(
+                children: TypeTimer.values.map((type) {
+                  return Expanded(
+                    child: RadioListTile<TypeTimer>(
+                      title: Text(type.toString().split('.').last),
+                      value: type,
+                      groupValue: _selectedType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedType = value!;
+                        });
+                      },
+                    ),
+                  );
+                }).toList(),
               ),
               TextFormField(
                 controller: _preparationTimeController,
@@ -124,21 +181,7 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
                   return null;
                 },
               ),
-              DropdownButtonFormField<TypeTimer>(
-                value: _selectedType,
-                decoration: InputDecoration(labelText: 'Timer Type'),
-                items: TypeTimer.values.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(type.toString().split('.').last),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedType = value!;
-                  });
-                },
-              ),
+
               TextFormField(
                 controller: _numberOfRoundsController,
                 decoration: InputDecoration(labelText: 'Number of Rounds'),
@@ -156,7 +199,9 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Create Timer'),
+                child: Text(widget.timerEntity != null
+                    ? '__Update Timer'
+                    : '__Create Timer'),
               ),
             ],
           ),

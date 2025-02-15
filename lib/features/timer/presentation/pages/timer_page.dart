@@ -1,5 +1,5 @@
 import 'package:box_round_timer/features/timer/domain/entities/timer_entity.dart';
-import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit.dart';
+import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit/timer_cubit.dart';
 import 'package:box_round_timer/features/timer/presentation/pages/add_or_update_timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

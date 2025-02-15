@@ -38,4 +38,17 @@ class TimerEntity {
     this.firstPhaseDuration,
     this.secondPhaseDuration,
   });
+  factory TimerEntity.defaultTimer() {
+    return TimerEntity(
+      nameOfTimer: "Default Timer",
+      idTimer: "0000",
+      preparationTime: 10,
+      resetTime: 5,
+      type: TypeTimer.normal,
+      numberOfRounds: 3,
+      roundTime: 30,
+      firstPhaseDuration: null,
+      secondPhaseDuration: null,
+    );
+  }
 }
