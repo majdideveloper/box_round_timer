@@ -49,6 +49,9 @@ class TimerRoundPickerWidget extends StatelessWidget {
                               initialItem: selectedMinutes),
                           onSelectedItemChanged: (index) {
                             selectedMinutes = index;
+                            // Trigger callback immediately on change
+                            onSelected(
+                                (selectedMinutes * 60) + selectedSeconds);
                           },
                           children: List.generate(
                             60,
@@ -68,6 +71,9 @@ class TimerRoundPickerWidget extends StatelessWidget {
                               initialItem: selectedSeconds),
                           onSelectedItemChanged: (index) {
                             selectedSeconds = index;
+                            // Trigger callback immediately on change
+                            onSelected(
+                                (selectedMinutes * 60) + selectedSeconds);
                           },
                           children: List.generate(
                             60,
@@ -82,21 +88,11 @@ class TimerRoundPickerWidget extends StatelessWidget {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text("Cancel"),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        int totalSeconds =
-                            (selectedMinutes * 60) + selectedSeconds;
-                        onSelected(totalSeconds);
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Done",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: const Text("Close"),
                     ),
                   ],
                 ),
