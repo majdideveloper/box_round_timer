@@ -21,6 +21,8 @@ mixin _$RunTimerState {
   int get remainingTime => throw _privateConstructorUsedError;
   int get currentRound => throw _privateConstructorUsedError;
   bool get isFirstPhase => throw _privateConstructorUsedError;
+  bool get isPreparation => throw _privateConstructorUsedError;
+  bool get isResting => throw _privateConstructorUsedError;
 
   /// Create a copy of RunTimerState
   /// with the given fields replaced by the non-null parameter values.
@@ -40,7 +42,9 @@ abstract class $RunTimerStateCopyWith<$Res> {
       TimerStatus status,
       int remainingTime,
       int currentRound,
-      bool isFirstPhase});
+      bool isFirstPhase,
+      bool isPreparation,
+      bool isResting});
 }
 
 /// @nodoc
@@ -63,6 +67,8 @@ class _$RunTimerStateCopyWithImpl<$Res, $Val extends RunTimerState>
     Object? remainingTime = null,
     Object? currentRound = null,
     Object? isFirstPhase = null,
+    Object? isPreparation = null,
+    Object? isResting = null,
   }) {
     return _then(_value.copyWith(
       timer: null == timer
@@ -85,6 +91,14 @@ class _$RunTimerStateCopyWithImpl<$Res, $Val extends RunTimerState>
           ? _value.isFirstPhase
           : isFirstPhase // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPreparation: null == isPreparation
+          ? _value.isPreparation
+          : isPreparation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isResting: null == isResting
+          ? _value.isResting
+          : isResting // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -102,7 +116,9 @@ abstract class _$$RunTimerStateImplCopyWith<$Res>
       TimerStatus status,
       int remainingTime,
       int currentRound,
-      bool isFirstPhase});
+      bool isFirstPhase,
+      bool isPreparation,
+      bool isResting});
 }
 
 /// @nodoc
@@ -123,6 +139,8 @@ class __$$RunTimerStateImplCopyWithImpl<$Res>
     Object? remainingTime = null,
     Object? currentRound = null,
     Object? isFirstPhase = null,
+    Object? isPreparation = null,
+    Object? isResting = null,
   }) {
     return _then(_$RunTimerStateImpl(
       timer: null == timer
@@ -145,6 +163,14 @@ class __$$RunTimerStateImplCopyWithImpl<$Res>
           ? _value.isFirstPhase
           : isFirstPhase // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPreparation: null == isPreparation
+          ? _value.isPreparation
+          : isPreparation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isResting: null == isResting
+          ? _value.isResting
+          : isResting // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -157,7 +183,9 @@ class _$RunTimerStateImpl implements _RunTimerState {
       required this.status,
       required this.remainingTime,
       required this.currentRound,
-      this.isFirstPhase = true});
+      this.isFirstPhase = true,
+      this.isPreparation = true,
+      this.isResting = false});
 
   @override
   final TimerEntity timer;
@@ -170,10 +198,16 @@ class _$RunTimerStateImpl implements _RunTimerState {
   @override
   @JsonKey()
   final bool isFirstPhase;
+  @override
+  @JsonKey()
+  final bool isPreparation;
+  @override
+  @JsonKey()
+  final bool isResting;
 
   @override
   String toString() {
-    return 'RunTimerState(timer: $timer, status: $status, remainingTime: $remainingTime, currentRound: $currentRound, isFirstPhase: $isFirstPhase)';
+    return 'RunTimerState(timer: $timer, status: $status, remainingTime: $remainingTime, currentRound: $currentRound, isFirstPhase: $isFirstPhase, isPreparation: $isPreparation, isResting: $isResting)';
   }
 
   @override
@@ -188,12 +222,16 @@ class _$RunTimerStateImpl implements _RunTimerState {
             (identical(other.currentRound, currentRound) ||
                 other.currentRound == currentRound) &&
             (identical(other.isFirstPhase, isFirstPhase) ||
-                other.isFirstPhase == isFirstPhase));
+                other.isFirstPhase == isFirstPhase) &&
+            (identical(other.isPreparation, isPreparation) ||
+                other.isPreparation == isPreparation) &&
+            (identical(other.isResting, isResting) ||
+                other.isResting == isResting));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, timer, status, remainingTime, currentRound, isFirstPhase);
+  int get hashCode => Object.hash(runtimeType, timer, status, remainingTime,
+      currentRound, isFirstPhase, isPreparation, isResting);
 
   /// Create a copy of RunTimerState
   /// with the given fields replaced by the non-null parameter values.
@@ -210,7 +248,9 @@ abstract class _RunTimerState implements RunTimerState {
       required final TimerStatus status,
       required final int remainingTime,
       required final int currentRound,
-      final bool isFirstPhase}) = _$RunTimerStateImpl;
+      final bool isFirstPhase,
+      final bool isPreparation,
+      final bool isResting}) = _$RunTimerStateImpl;
 
   @override
   TimerEntity get timer;
@@ -222,6 +262,10 @@ abstract class _RunTimerState implements RunTimerState {
   int get currentRound;
   @override
   bool get isFirstPhase;
+  @override
+  bool get isPreparation;
+  @override
+  bool get isResting;
 
   /// Create a copy of RunTimerState
   /// with the given fields replaced by the non-null parameter values.

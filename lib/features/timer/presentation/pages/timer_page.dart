@@ -1,6 +1,8 @@
 import 'package:box_round_timer/features/timer/domain/entities/timer_entity.dart';
+import 'package:box_round_timer/features/timer/presentation/cubit/run_timer_cubit/cubit/run_timer_cubit.dart';
 import 'package:box_round_timer/features/timer/presentation/cubit/timer_cubit/timer_cubit.dart';
 import 'package:box_round_timer/features/timer/presentation/pages/add_or_update_timer_page.dart';
+import 'package:box_round_timer/features/timer/presentation/pages/run_timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -30,11 +32,23 @@ class TimerPage extends StatelessWidget {
                             )),
                   ),
                   title: Text(timer.nameOfTimer),
-                  subtitle: Text('Duration: ${timer.preparationTime} sec'),
-                  trailing: IconButton(
+                  subtitle: Text('Duration: ${timer.roundTime} sec'),
+                  leading: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
                       context.read<TimerCubit>().deleteTimer(timer.idTimer);
+                    },
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.play_arrow, color: Colors.red),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RunTimerPage(
+                                  timer: timer,
+                                )),
+                      );
                     },
                   ),
                 );
