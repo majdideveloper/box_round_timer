@@ -1,5 +1,6 @@
 import 'package:box_round_timer/features/timer/domain/entities/timer_entity.dart';
 import 'package:box_round_timer/features/timer/presentation/pages/run_timer_page.dart';
+import 'package:box_round_timer/features/timer/presentation/pages/settings_page.dart';
 import 'package:box_round_timer/features/timer/presentation/pages/timer_page.dart';
 import 'package:box_round_timer/features/timer/presentation/widgets/round_picker_widget.dart';
 import 'package:box_round_timer/features/timer/presentation/widgets/timer_round_picker_widget.dart';
@@ -31,6 +32,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("__BOX ROUND TIMER"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+              icon: Icon(Icons.settings)),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

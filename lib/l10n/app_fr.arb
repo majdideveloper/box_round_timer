@@ -1,0 +1,34 @@
+{
+
+
+    "@@comment": "Translate Onboarding page",
+    "onboarding_title1": "Bienvenue",
+    "onboarding_subtitle1": "Découvrez des fonctionnalités incroyables adaptées pour vous.",
+    "onboarding_title2": "Restez connecté",
+    "onboarding_subtitle2": "Discutez et interagissez facilement avec vos amis à tout moment.",
+    "onboarding_title3": "Commencez",
+    "onboarding_subtitle3": "Créez un compte et explorez des possibilités infinies.",
+
+
+    "@@comment": "Translations for Home Page",
+    "helloWorld": "Bonjour le monde",
+    "hello": "Bonjour",
+    "search": "Rechercher",
+    "welcome": "Bienvenue",
+
+    "@@comment": "Translations for Settings Page",
+    "selectLanguageOfYourChoice": "Sélectionnez la langue de votre choix",
+    "delete": "Supprimer",
+    "yes": "Oui",
+    "no": "Non",
+    "home": "Accueil",
+    "settings": "Paramètres",
+    "changeTheme": "Changer le thème",
+
+    "@@comment": "General",
+    "languageName": "Français",
+    "started":"Commencer",
+    "next":"Suivant",
+    "skip" : "Passer",
+    "version": "Version"
+}

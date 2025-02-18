@@ -1,0 +1,31 @@
+{
+    "@@comment": "ترجمة صفحة التقديم",
+    "onboarding_title1": "مرحبًا",
+    "onboarding_subtitle1": "اكتشف ميزات مذهلة مصممة خصيصًا لك.",
+    "onboarding_title2": "ابق على اتصال",
+    "onboarding_subtitle2": "تواصل بسهولة مع أصدقائك في أي وقت.",
+    "onboarding_title3": "ابدأ الآن",
+    "onboarding_subtitle3": "أنشئ حسابًا واستكشف الإمكانيات غير المحدودة.",
+
+    "@@comment": "ترجمات لصفحة المنزل",
+    "helloWorld": "مرحبًا بالعالم",
+    "hello": "مرحبًا",
+    "search": "بحث",
+    "welcome": "مرحبًا",
+
+    "@@comment": "ترجمات لصفحة الإعدادات",
+    "selectLanguageOfYourChoice": "اختر اللغة التي تفضلها",
+    "delete": "حذف",
+    "yes": "نعم",
+    "no": "لا",
+    "home": "الرئيسية",
+    "settings": "الإعدادات",
+    "changeTheme": "تغيير السمة",
+
+    "@@comment": "عام",
+    "languageName": "الإنجليزية",
+    "started": "ابدأ الآن",
+    "next": "التالي",
+    "skip": "تخطي",
+    "version": "الإصدار"
+}
