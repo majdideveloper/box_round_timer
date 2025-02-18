@@ -7,7 +7,7 @@ class RunTimerState with _$RunTimerState {
     required TimerStatus status,
     required int remainingTime,
     required int currentRound,
-    @Default(true) bool isFirstPhase,
+    @Default(false) bool isFirstPhase,
     @Default(true) bool isPreparation,
     @Default(false) bool isResting,
   }) = _RunTimerState;

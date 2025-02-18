@@ -24,9 +24,7 @@ class TimerLocalDataSourceImpl implements TimerLocalDataSource {
 
   @override
   Future<Unit> addTimer(TimerModel timerModel) async {
-    log("Before getCachedTimers");
     final List<TimerModel> timers = await getCachedTimers();
-    log("Fetched timers, adding new one.");
     timers.add(timerModel);
     await _saveTimers(timers);
     return unit;

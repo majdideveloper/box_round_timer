@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -10,6 +12,7 @@ part 'run_timer_cubit.freezed.dart';
 
 class RunTimerCubit extends Cubit<RunTimerState> {
   Timer? _timer;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   RunTimerCubit(TimerEntity timer)
       : super(RunTimerState(
@@ -18,6 +21,7 @@ class RunTimerCubit extends Cubit<RunTimerState> {
           remainingTime: timer.preparationTime,
           currentRound: 1,
           isPreparation: true,
+          isFirstPhase: false,
         ));
 
   void startTimer() {
@@ -28,13 +32,25 @@ class RunTimerCubit extends Cubit<RunTimerState> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.remainingTime > 0) {
         emit(state.copyWith(remainingTime: state.remainingTime - 1));
+        if (state.timer.type == TypeTimer.dualPhase &&
+            state.isFirstPhase &&
+            state.timer.firstPhaseDuration != null &&
+            state.remainingTime == state.timer.secondPhaseDuration) {
+          emit(state.copyWith(
+            isFirstPhase: false,
+          ));
+          // _playSound();
+        }
       } else {
         if (state.isPreparation) {
           _startRound();
+          // _playSound();
         } else if (state.isResting) {
           _startRound();
+          // _playSound();
         } else {
           _handleRoundCompletion();
+          // _playSound();
         }
       }
     });
@@ -45,6 +61,8 @@ class RunTimerCubit extends Cubit<RunTimerState> {
       isPreparation: false,
       isResting: false,
       remainingTime: state.timer.roundTime ?? 0,
+      isFirstPhase: state.timer.type ==
+          TypeTimer.dualPhase, // Set isFirstPhase based on timer type
     ));
   }
 
@@ -52,7 +70,7 @@ class RunTimerCubit extends Cubit<RunTimerState> {
     if (state.timer.type == TypeTimer.dualPhase) {
       if (state.isFirstPhase &&
           state.timer.firstPhaseDuration != null &&
-          state.remainingTime == state.timer.secondPhaseDuration) {
+          state.remainingTime == state.timer.firstPhaseDuration) {
         emit(state.copyWith(
           isFirstPhase: false,
         ));
@@ -69,7 +87,7 @@ class RunTimerCubit extends Cubit<RunTimerState> {
       emit(state.copyWith(
         remainingTime: state.timer.resetTime,
         currentRound: state.currentRound + 1,
-        isFirstPhase: true, // Reset for dualPhase
+        isFirstPhase: false, // Set isFirstPhase based on timer type
         isResting: true,
       ));
     } else {
@@ -95,12 +113,25 @@ class RunTimerCubit extends Cubit<RunTimerState> {
       remainingTime: state.timer.preparationTime,
       currentRound: 1,
       isPreparation: true,
+      isFirstPhase: state.timer.type ==
+          TypeTimer.dualPhase, // Set isFirstPhase based on timer type
     ));
+  }
+
+  // Play sound function
+  void _playSound() async {
+    try {
+      await _audioPlayer
+          .play(AssetSource('audio/boxing_test.mp3')); // Play sound from assets
+    } catch (e) {
+      log("Error playing sound: $e");
+    }
   }
 
   @override
   Future<void> close() {
     _timer?.cancel();
+    _audioPlayer.dispose();
     return super.close();
   }
 }
