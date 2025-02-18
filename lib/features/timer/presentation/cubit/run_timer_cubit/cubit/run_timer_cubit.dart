@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../domain/entities/timer_entity.dart';
@@ -15,8 +15,9 @@ class RunTimerCubit extends Cubit<RunTimerState> {
       : super(RunTimerState(
           timer: timer,
           status: TimerStatus.initial,
-          remainingTime: timer.roundTime ?? 0,
+          remainingTime: timer.preparationTime,
           currentRound: 1,
+          isPreparation: true,
         ));
 
   void startTimer() {
@@ -28,16 +29,31 @@ class RunTimerCubit extends Cubit<RunTimerState> {
       if (state.remainingTime > 0) {
         emit(state.copyWith(remainingTime: state.remainingTime - 1));
       } else {
-        _handleRoundCompletion();
+        if (state.isPreparation) {
+          _startRound();
+        } else if (state.isResting) {
+          _startRound();
+        } else {
+          _handleRoundCompletion();
+        }
       }
     });
   }
 
+  void _startRound() {
+    emit(state.copyWith(
+      isPreparation: false,
+      isResting: false,
+      remainingTime: state.timer.roundTime ?? 0,
+    ));
+  }
+
   void _handleRoundCompletion() {
     if (state.timer.type == TypeTimer.dualPhase) {
-      if (state.isFirstPhase && state.timer.firstPhaseDuration != null) {
+      if (state.isFirstPhase &&
+          state.timer.firstPhaseDuration != null &&
+          state.remainingTime == state.timer.secondPhaseDuration) {
         emit(state.copyWith(
-          remainingTime: state.timer.secondPhaseDuration ?? 0,
           isFirstPhase: false,
         ));
       } else {
@@ -51,9 +67,10 @@ class RunTimerCubit extends Cubit<RunTimerState> {
   void _nextRound() {
     if (state.currentRound < state.timer.numberOfRounds) {
       emit(state.copyWith(
-        remainingTime: state.timer.roundTime ?? 0,
+        remainingTime: state.timer.resetTime,
         currentRound: state.currentRound + 1,
         isFirstPhase: true, // Reset for dualPhase
+        isResting: true,
       ));
     } else {
       _finishTimer();
@@ -75,8 +92,9 @@ class RunTimerCubit extends Cubit<RunTimerState> {
     emit(RunTimerState(
       timer: state.timer,
       status: TimerStatus.initial,
-      remainingTime: state.timer.roundTime ?? 0,
+      remainingTime: state.timer.preparationTime,
       currentRound: 1,
+      isPreparation: true,
     ));
   }
 

@@ -1,7 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:box_round_timer/features/timer/presentation/widgets/custom_timer_or_number_input.dart';
 import 'package:box_round_timer/features/timer/presentation/widgets/input_number.dart';
 import 'package:box_round_timer/features/timer/presentation/widgets/number_or_timer_picker.dart';
+import 'package:box_round_timer/features/timer/presentation/widgets/round_picker_widget.dart';
+import 'package:box_round_timer/features/timer/presentation/widgets/timer_round_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -23,17 +27,24 @@ class AddOrUpdateTimerPage extends StatefulWidget {
 class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _preparationTimeController = TextEditingController();
-  final _resetTimeController = TextEditingController();
-  final _numberOfRoundsController = TextEditingController();
-  TypeTimer _selectedType = TypeTimer.normal;
+  TypeTimer selectedType = TypeTimer.normal;
+
+  int preprationTime = 30;
+
+  int numberOfRound = 3;
+
+  int roundTime = 30;
+
+  int firstPhaseRound = 30;
+
+  int secondPhasePound = 30;
+
+  int restTime = 30;
 
   @override
   void dispose() {
     _nameController.dispose();
-    _preparationTimeController.dispose();
-    _resetTimeController.dispose();
-    _numberOfRoundsController.dispose();
+
     super.dispose();
   }
 
@@ -42,34 +53,29 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
     // TODO: implement initState
     if (widget.timerEntity != null) {
       _nameController.text = widget.timerEntity!.nameOfTimer;
-      _preparationTimeController.text =
-          widget.timerEntity!.preparationTime.toString();
-      _resetTimeController.text = widget.timerEntity!.resetTime.toString();
-      _numberOfRoundsController.text =
-          widget.timerEntity!.numberOfRounds.toString();
     } else {
       //TODO refactor this code to make more redable
       _nameController.text = TimerEntity.defaultTimer().nameOfTimer;
-      _preparationTimeController.text =
-          TimerEntity.defaultTimer().preparationTime.toString();
-      _resetTimeController.text =
-          TimerEntity.defaultTimer().resetTime.toString();
-      _numberOfRoundsController.text =
-          TimerEntity.defaultTimer().numberOfRounds.toString();
     }
     super.initState();
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      log(_formKey.currentState!.validate().toString());
       // Create a new TimerEntity
       final newTimer = TimerEntity(
         nameOfTimer: _nameController.text,
         idTimer: const Uuid().v1(), // Generate a unique ID
-        preparationTime: int.parse(_preparationTimeController.text),
-        resetTime: int.parse(_resetTimeController.text),
-        type: _selectedType,
-        numberOfRounds: int.parse(_numberOfRoundsController.text),
+        preparationTime: preprationTime,
+        resetTime: restTime,
+        type: selectedType,
+        numberOfRounds: numberOfRound,
+        roundTime: selectedType == TypeTimer.dualPhase
+            ? firstPhaseRound + secondPhasePound
+            : roundTime,
+        firstPhaseDuration: firstPhaseRound,
+        secondPhaseDuration: secondPhasePound,
       );
       if (widget.timerEntity != null) {
         context
@@ -97,106 +103,105 @@ class _AddOrUpdateTimerPageState extends State<AddOrUpdateTimerPage> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
+            spacing: 20,
             children: [
-              CustomTimerOrNumberInput(
-                  isTimer: true,
-                  onChanged: (number) =>
-                      _preparationTimeController.text == number),
-              NumberOrTimerPicker(
-                title: 'Preparation Time',
-                initialValue: int.parse(_preparationTimeController.text),
-                onSelected: (value) {
-                  setState(() {
-                    //TODO i need default timer to make work every time
-                    _preparationTimeController.text = value.toString();
-                  });
-                },
-              ),
-              IOSNumberPicker(
-                title: 'Reset Time (seconds)',
-                initialValue: int.parse(_resetTimeController.text),
-                onSelected: (value) {
-                  setState(() {
-                    _resetTimeController.text = value.toString();
-                  });
-                },
-              ),
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: '__Timer Name'),
+                decoration: InputDecoration(
+                  labelText: 'Enter name of Timer',
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a name for the timer';
+                    return 'Please enter name of timer';
                   }
                   return null;
                 },
               ),
               //TODO fix this radio button to save the correct value
               //TODO make this widget in common widget to use in home page and in this page
-              Text('Timer Type',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              // Text('Timer Type',
+              //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               Row(
                 children: TypeTimer.values.map((type) {
                   return Expanded(
                     child: RadioListTile<TypeTimer>(
                       title: Text(type.toString().split('.').last),
                       value: type,
-                      groupValue: _selectedType,
+                      groupValue: selectedType,
                       onChanged: (value) {
                         setState(() {
-                          _selectedType = value!;
+                          selectedType = value!;
                         });
                       },
                     ),
                   );
                 }).toList(),
               ),
-              TextFormField(
-                controller: _preparationTimeController,
-                decoration:
-                    InputDecoration(labelText: 'Preparation Time (seconds)'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the preparation time';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
+              Text('${selectedType.name}'),
+              TimerRoundPickerWidget(
+                title: "Preparation Time",
+                initialSeconds: preprationTime,
+                onSelected: (value) {
+                  setState(() {
+                    preprationTime = value;
+                  });
                 },
               ),
-              TextFormField(
-                controller: _resetTimeController,
-                decoration: InputDecoration(labelText: 'Reset Time (seconds)'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the reset time';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
+              RoundPickerWidget(
+                title: "Number of Rounds",
+                minValue: 1,
+                maxValue: 20,
+                initialValue: numberOfRound,
+                onSelected: (value) {
+                  setState(() {
+                    numberOfRound = value;
+                  });
+                },
+              ),
+              selectedType == TypeTimer.normal
+                  ? TimerRoundPickerWidget(
+                      title: "Round Time",
+                      initialSeconds: roundTime,
+                      onSelected: (value) {
+                        setState(() {
+                          roundTime = value;
+                        });
+                      },
+                    )
+                  : Column(
+                      spacing: 20,
+                      children: [
+                        TimerRoundPickerWidget(
+                          title: "First Phase",
+                          initialSeconds: firstPhaseRound,
+                          onSelected: (value) {
+                            setState(() {
+                              firstPhaseRound = value;
+                            });
+                          },
+                        ),
+                        TimerRoundPickerWidget(
+                          title: "Second Phase",
+                          initialSeconds: secondPhasePound,
+                          onSelected: (value) {
+                            setState(() {
+                              secondPhasePound = value;
+                            });
+                          },
+                        )
+                      ],
+                    ),
+              TimerRoundPickerWidget(
+                title: "Rest Time",
+                initialSeconds: restTime,
+                onSelected: (value) {
+                  setState(() {
+                    restTime = value;
+                  });
                 },
               ),
 
-              TextFormField(
-                controller: _numberOfRoundsController,
-                decoration: InputDecoration(labelText: 'Number of Rounds'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the number of rounds';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text(widget.timerEntity != null

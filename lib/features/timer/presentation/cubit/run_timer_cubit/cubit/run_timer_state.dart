@@ -7,8 +7,10 @@ class RunTimerState with _$RunTimerState {
     required TimerStatus status,
     required int remainingTime,
     required int currentRound,
-    @Default(true) bool isFirstPhase, // Only for dualPhase timers
+    @Default(true) bool isFirstPhase,
+    @Default(true) bool isPreparation,
+    @Default(false) bool isResting,
   }) = _RunTimerState;
 }
 
-enum TimerStatus { initial, running, paused, finished }
+enum TimerStatus { initial, running, resting, paused, finished }
